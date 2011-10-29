@@ -1,0 +1,48 @@
+<html>
+  <head>
+
+    <link rel="stylesheet" type="text/css" href="./autocomplete.css" />
+    <link rel="stylesheet" type="text/css" href="./multiautocomplete.css" />
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script type="text/javascript" src="./autocomplete.js"></script>
+    <script type="text/javascript" src="./multiautocomplete.js"></script>
+
+    <script type="text/javascript">
+        $(function(){
+
+            var sports = [
+              "Athletics",
+              "AFL",
+              "Baseball",
+              "Boxing",
+              "Cricket",
+              "Cycling",
+              "Diving",
+              "Football",
+              "Golf",
+              "Hockey",
+              "Ice Hockey",
+              "Netball",
+              "Rowing",
+              "Sailing",
+              "Softball",
+              "Surfing",
+              "Swimming",
+              "Table Tennis",
+              "Tennis",
+              "Volleyball",
+              "Wresting"
+            ];
+
+          $("#sportName").multiAutocomplete(sports, {
+            lineHeight: 23
+          })
+        });
+    </script>
+
+  </head>
+  <body>
+    <input type="text" id="sportName" name="sportName" value="" style="width: 300px;"/>
+  </body>
+</html>
