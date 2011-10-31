@@ -279,7 +279,7 @@
         mac.addSelection(value);
     }
 
-    function _itemDeleted() {
+    function _itemDeleted(event) {
 
        var mac = _getInstance(event.target);
        mac.removeSelection($(event.target).parent());
