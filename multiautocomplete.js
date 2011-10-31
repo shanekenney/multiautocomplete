@@ -297,4 +297,3 @@
 
 })($, $.Autocompleter);
 // JQuery and Autocompleter dependencies.
-/ JQuery and Autocompleter dependencies.
