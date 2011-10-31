@@ -1,19 +1,20 @@
+
 (function($, Autocompleter){
 
-    var PLUGIN_NAME = "MultiAutocompleter";
+    var PLUGIN_NAME = "MultiAutocomplete";
 
     $.fn.multiAutocomplete = function(dataSource, options) {
 
         return this.each(function() {
 
-            var mac = new MultiAutocompleter(this, dataSource, options);
+            var mac = new MultiAutocomplete(this, dataSource, options);
             $.data(mac.$container[0], PLUGIN_NAME, mac);
         });
     };
 
-    MultiAutocompleter.prototype = {
+    MultiAutocomplete.prototype = {
 
-        constructor: $.MultiAutocompleter,
+        constructor: $.MultiAutocomplete,
         addSelection: addSelection,
         addTileToList: addTileToList,
         removeSelection: removeSelection,
@@ -27,7 +28,7 @@
         popRow: popRow
     }
 
-    function MultiAutocompleter(el, dataSource, options) {
+    function MultiAutocomplete(el, dataSource, options) {
 
         this.defaults = {
           containerClass: ".mac-container",
@@ -70,7 +71,9 @@
         $.valHooks.text = {
             set: function(elem, value) {
                 var mac = _getInstance(elem);
-                mac && mac.renderTiles(value);
+                if(mac && mac.$input[0] === elem) {
+                      mac.renderTiles(value);
+                }
             }
         };
     }
@@ -294,3 +297,4 @@
 
 })($, $.Autocompleter);
 // JQuery and Autocompleter dependencies.
+/ JQuery and Autocompleter dependencies.
