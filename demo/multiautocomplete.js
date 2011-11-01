@@ -37,7 +37,8 @@
           inputItemClass: ".mac-search",
           textInputClass: ".mac-input",
           textInputWidth: 20,
-          lineHeight: 25
+          lineHeight: 25,
+          selected: undefined
         }
 
         this.options = $.extend({}, $.Autocompleter.defaults, this.defaults, options, {
@@ -279,6 +280,11 @@
                       .val("");
 
         mac.addSelection(value);
+
+        var selected = mac.options.selected;
+        if(selected && typeof selected === "function") {
+            selected(data, value);
+        }
     }
 
     function _itemDeleted(event) {
