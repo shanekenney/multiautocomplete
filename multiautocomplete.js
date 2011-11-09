@@ -38,18 +38,22 @@
           textInputClass: ".mac-input",
           textInputWidth: 20,
           lineHeight: 25,
-          selected: undefined
+          selected: undefined,
+          mustMatch: false
         }
 
-        this.options = $.extend({}, $.Autocompleter.defaults, this.defaults, options, {
-          width: 199,
-          multiple: false
-        });
+        this.options = $.extend({}, $.Autocompleter.defaults, this.defaults, options);
 
         var control = _renderControl(el, this.options);
-        control.acInput.autocomplete(dataSource, this.options)
-               .bind("keydown", _keyPressed)
-               .bind("result", _itemSelected);
+
+        control.acInput.autocomplete(dataSource, $.extend({}, this.options, {
+          mustMatch: false,
+          multiple: false,
+          width: 200
+        }));
+
+        control.acInput.bind("keydown", _keyPressed)
+                       .bind("result", _itemSelected);
 
         this.$input = $(el);
 
@@ -71,7 +75,7 @@
         $.valHooks.text = {
             set: function(elem, value) {
                 var mac = _getInstance(elem);
-                if(mac && mac.$input[0] === elem) {
+                if(mac && mac.$input[0] === elem && value !== "") {
                       mac.renderTiles(value);
                 }
             }
@@ -236,6 +240,8 @@
 
         var Key = {
             BACKSPACE: 8,
+            TAB: 9,
+            RETURN: 13,
             DELETE: 46,
             isPrintChar: function(key) {
                 return key > 31 && key < 127;
@@ -248,6 +254,8 @@
         if(Key.isPrintChar(event.keyCode) || Key.BACKSPACE === event.keyCode)
             mac.resizeInput();
 
+        // If backspace is pressed while the input area is empty we
+        // assume they want to delete the previous selection.
         if(Key.BACKSPACE === event.keyCode && mac.$acInput.val() === "") {
 
             var selection = mac.previousSelection();
@@ -259,6 +267,20 @@
                 selection && selection.children(mac.options.deleteSelectionClass).addClass("active");
             }
         }
+
+        // If Enter or Tab are pressed and we have a value to complete than
+        // then selection is completed.
+        else if(Key.RETURN === event.keyCode || Key.TAB === event.keyCode
+                && mac.$acInput.val() !== "") {
+
+            !mac.options.mustMatch ? mac.$acInput.trigger("result", [undefined, mac.$acInput.val()])
+                                   : mac.$acInput.val("");
+
+            return false;
+        }
+
+        // Default case, if the starts typing and a selection was previously highlighted for deletion
+        // remove the highlight.
         else {
 
             var selection = mac.previousSelection();
@@ -272,6 +294,9 @@
     }
 
     function _itemSelected(event, data, value) {
+
+        //No value supplied so early exit.
+        if(!value || value === "") return;
 
         var mac = _getInstance(event.target),
             selectionsHeight = mac.$selections.height();
