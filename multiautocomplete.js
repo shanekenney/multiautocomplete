@@ -75,7 +75,7 @@
         $.valHooks.text = {
             set: function(elem, value) {
                 var mac = _getInstance(elem);
-                if(mac && mac.$input[0] === elem && value !== "") {
+                if(mac && mac.$input[0] === elem) {
                       mac.renderTiles(value);
                 }
             }
